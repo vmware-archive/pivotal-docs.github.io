@@ -1,0 +1,638 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <!-- Always force latest IE rendering engine or request Chrome Frame -->
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+
+    <!-- Use title if it's in the page YAML frontmatter -->
+    <title>Pivotal CF Getting Started (v.0.3.1) | Pivotal CF Docs</title>
+
+    <link href="stylesheets/master.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="stylesheets/styles.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="stylesheets/documentation.css" media="screen" rel="stylesheet" type="text/css" />
+
+    <script src="javascripts/all.js" type="text/javascript"></script>
+    <link href='/images/favicon.ico' rel='shortcut icon'>
+
+  </head>
+
+  <body class="guide_tempest">
+    <div class='header-wrap'>
+      <div class='container por'>
+        <div class='logo-wrap'>
+          <a href="/" class="pngfix logo"></a>
+        </div>
+        <div class='logo-pivotal'>
+          Pivotal CF
+        </div>
+      </div>
+      <div class="header-shadow">
+      </div>
+    </div>
+    <div class="main-wrap">
+      <div class="container">
+        <div id="sub-nav" class="nav-container">
+          <ul class="menu">
+            <li class="first expanded js-maintopic"><a href="/index.html">Home</a></li>
+			<li class="first expanded js-topic"><a href="/getting_started.html">Operator's Guide</a> <ul>
+			<li class="first leaf js-topic"><a href="/index.html">Networking</a></li>
+			<ul class="leaf"><li class="first leaf js-subtopic"><a href="/index.html">SSL Termination</a></li>
+				<li class="first leaf js-subtopic"><a href="/index.html">Load Balancing</a></li>
+				<li class="first leaf js-subtopic"><a href="/private_networks.html">Private Networks</a></li>
+				</ul>
+				<li class="first leaf js-topic"><a href="/index.html">Troubleshooting</a></li>
+          </ul>
+</li>
+</ul>
+        </div>
+        <div class="body-container content">
+
+          <h3 class="title-container">Pivotal CF Getting Started (v.0.3.1)</h3>
+
+          <h2><a id='requirements'></a>Requirements</h2>
+
+<ul>
+<li>vSphere 5.0, 5.1, 5.5. Recommended version: vSphere 5.1</li>
+<li>vSphere user privileges to create VMs, disk paths, and VM folders</li>
+<li>Ability to create a wildcard DNS record to point to your router or load balancer</li>
+<li>No DHCP on the network: DHCP prevents static IP addresses from being re-allocated</li>
+<li>Shared storage Input/Output Operations per Second (IOPS) at least 10,000</li>
+<li>Twice as many available IPs as instances</li>
+<li>Capacity for the following virtual machines:</li>
+</ul>
+
+<table><thead>
+<tr>
+<th align="left"><strong>INSTANCES</strong></th>
+<th align="left"><strong>VM</strong></th>
+<th align="left"><strong>RAM (GB)</strong></th>
+<th align="left"><strong>DISK (GB)</strong></th>
+<th align="left"><strong>CPU</strong></th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">1</td>
+<td align="left">NATS</td>
+<td align="left">1</td>
+<td align="left">10</td>
+<td align="left">1</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">Health Manager</td>
+<td align="left">3</td>
+<td align="left">36</td>
+<td align="left">1</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">NFS Server</td>
+<td align="left">1</td>
+<td align="left">100</td>
+<td align="left">1</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">Cloud Controller Database</td>
+<td align="left">1</td>
+<td align="left">4</td>
+<td align="left">1</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">Cloud Controller</td>
+<td align="left">1</td>
+<td align="left">2</td>
+<td align="left">1</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">Router</td>
+<td align="left">1</td>
+<td align="left">2</td>
+<td align="left">1</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">Syslog</td>
+<td align="left">1</td>
+<td align="left">10</td>
+<td align="left">1</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">Collector</td>
+<td align="left">1</td>
+<td align="left">2</td>
+<td align="left">1</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">UAA Database</td>
+<td align="left">1</td>
+<td align="left">10</td>
+<td align="left">1</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">UAA</td>
+<td align="left">1</td>
+<td align="left">3</td>
+<td align="left">1</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">SAML Login</td>
+<td align="left">1</td>
+<td align="left">3</td>
+<td align="left">1</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">Console Database</td>
+<td align="left">1</td>
+<td align="left">3</td>
+<td align="left">1</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">DEA</td>
+<td align="left">16</td>
+<td align="left">11</td>
+<td align="left">2</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">Loggregator Server</td>
+<td align="left">1</td>
+<td align="left">2</td>
+<td align="left">1</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">Loggregator Router</td>
+<td align="left">1</td>
+<td align="left">2</td>
+<td align="left">1</td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left">Compilation</td>
+<td align="left">1</td>
+<td align="left">4</td>
+<td align="left">2</td>
+</tr>
+<tr>
+<td align="left"><strong>21</strong></td>
+<td align="left"><strong>TOTALS</strong></td>
+<td align="left"><strong>33</strong></td>
+<td align="left"><strong>204</strong></td>
+<td align="left"><strong>18</strong></td>
+</tr>
+</tbody></table>
+
+<h2><a id='deploy_vm'></a>Deploying the Installation Virtual Machine</h2>
+
+<p><strong>Goal</strong>: Create a virtual machine to install and manage Pivotal CF on vSphere. You will install Pivotal CF in a later section.</p>
+
+<ol>
+<li>Refer to the <a href="#known_issues">Known Issues</a> section before getting started.</li>
+<li>Download the Pivotal CF .ova file.</li>
+<li>Login to vCenter.</li>
+<li><p>Select the <strong>VM and Templates</strong> view.</p>
+
+<p><img src="images/guide/vm_template_view.png" /></p></li>
+<li><p>Right click on your datacenter and select <strong>New Folder</strong>.</p>
+
+<p><img src="images/guide/new_folder.png" /></p></li>
+<li><p>Name the folder &ldquo;Pivotal CF&rdquo; and select it.</p>
+
+<p><img src="images/guide/folder_name.png" /></p></li>
+<li><p>Select <strong>File &gt; Deploy OVF Template</strong>.</p>
+
+<p><img src="images/guide/deploy_ova.png" /></p></li>
+<li><p>Select the .ova file and click <strong>Next</strong>.</p>
+
+<p><img src="images/guide/next.png" /></p></li>
+<li><p>Review the product details and click <strong>Next</strong>.</p></li>
+<li><p>Accept the license agreement and click <strong>Next</strong>.</p></li>
+<li><p>Name the virtual machine and click <strong>Next</strong>.</p>
+
+<p><img src="images/guide/vm_name.png" /></p>
+
+<p><strong>Note</strong>: The selected folder is the one you created.</p></li>
+<li><p>Select a vSphere cluster and click <strong>Next</strong>.</p>
+
+<p><img src="images/guide/anchovy-cluster.png" /></p></li>
+<li><p>Select a resource pool and click <strong>Next</strong>.</p></li>
+<li><p>Select a host and click <strong>Next</strong>.</p>
+
+<p><img src="images/guide/host.png" /></p></li>
+<li><p>Select a storage destination and click <strong>Next</strong>.</p>
+
+<p><img src="images/guide/storage.png" /></p></li>
+<li><p>Select a disk format and click <strong>Next</strong>.</p>
+
+<p><img src="images/guide/disk_format.png" /></p></li>
+<li><p>Select a network and click <strong>Next</strong>.</p>
+
+<p><img src="images/guide/network.png" /></p></li>
+<li><p>Enter network information and passwords for the VM admin user and click <strong>Next</strong>.
+<strong>Note</strong>: The IP Address you enter will be the location of the Pivotal CF interface.</p>
+
+<p><img src="images/guide/vm_admin.png" /></p></li>
+<li><p>Check the <strong>Power on after deployment</strong> checkbox and click <strong>Finish</strong>. Once the VM boots, the interface is available at the IP address you specified in step 15.</p></li>
+</ol>
+
+<h2><a id='install_cf'></a>Installing Cloud Foundry</h2>
+
+<p><strong>Goal</strong>: Install Cloud Foundry via a web application running in the VM you just deployed.</p>
+
+<ol>
+<li><p>Open a browser to the interface at the IP address you specified in step 15.</p>
+
+<p><img src="images/guide/pivotal_cf.png" /></p></li>
+<li><p>Create a <strong>User name</strong> and <strong>Password</strong>.</p>
+
+<p><strong>Note</strong>: Save your password in a backed-up location. If you lose your password, your installation will be unmanageable.</p></li>
+<li><p>Under VMware vSphere, click <strong>Configure</strong>.</p>
+
+<p><img src="images/guide/config_vsphere.png" /></p></li>
+<li><p>Enter your vCenter IP and credentials and click <strong>Save</strong>.</p>
+
+<p><img src="images/guide/vcenter_cred.png" /></p>
+
+<p><strong>Note</strong>: This user must have create/delete privileges for VMs and folders.</p></li>
+<li><p>Select <strong>vSphere configuration</strong>, specify the installation resources, and click <strong>Save</strong>.</p>
+
+<p><img src="images/guide/config_vcenter.png" /></p></li>
+<li><p>Select <strong>Network configuration</strong>, enter the Cloud Foundry IP ranges, DNS, and gateway settings, and click <strong>Save</strong>. The Network Range is for the IPs that will be used by Cloud Foundry Virtual Machines. <strong>Reserved IP Ranges</strong> are blacklisted from the installation.</p>
+
+<p><img src="images/guide/config_network.png" /></p></li>
+<li><p>Select <strong>NTP servers</strong>, enter a comma delimited list of time server addresses, and click <strong>Save</strong>.</p>
+
+<p><img src="images/guide/ntp_servers.png" /></p></li>
+<li><p>Click <strong>Back to Install</strong> to return to the <strong>Install</strong> page.</p></li>
+<li><p>Under Runtime, click <strong>Add</strong>.</p>
+
+<p><strong>Note:</strong> No configuration is necessary for the Operator.</p>
+
+<p><img src="images/guide/runtime.png" /></p></li>
+<li><p>Enter two domains for your Cloud Controller installation and click <strong>Save</strong>. The system domain is used for targeting and pushing apps to Cloud Foundry. The application domain is used for serving apps. Set up wildcard DNS records for these domains as described in the next step.</p>
+
+<p><img src="images/guide/cloud_cont.png" /></p></li>
+<li><p>Select <strong>Router</strong> and enter an IP address. The wildcard DNS records should point to this IP address or to a load balancer.</p>
+
+<p><img src="images/guide/router.png" /></p></li>
+<li><p>Select <strong>SAML Login</strong> and enter the URL of an SSO appliance to connect to Active Directory servers in your organization. Cloud Foundry&rsquo;s User Account and Authentication server uses this address. For more information about configuring an SSO appliance, refer to the SSO Appliance topic.</p>
+
+<p><img src="images/guide/saml_login.png" /></p></li>
+<li><p>Select <strong>Console</strong>, enter your reply-to and SMTP email information, and click <strong>Save</strong>. The console uses these settings to send invitations and confirmations to console users.</p>
+
+<p><img src="images/guide/console.png" /></p></li>
+<li><p>Click <strong>Back to Install</strong> to return to the <strong>Install</strong> page.</p></li>
+<li><p>Under MySQL Dev, click <strong>Add</strong>.</p>
+
+<p><img src="images/guide/mysql_dev.png" /></p></li>
+<li><p>Configure MySQL or keep the default values, then click <strong>Back to Install</strong> to return to the <strong>Install</strong> page.</p></li>
+<li><p>Click <strong>Install</strong>.</p>
+
+<p><img src="images/guide/install.png" /></p></li>
+<li><p>Your Cloud Foundry installation will begin deploying.</p>
+
+<p><img src="images/guide/deploy_prog.png" /></p></li>
+<li><p>When the deployment is finished, you will see a success message.</p>
+
+<p><img src="images/guide/deploy_success.png" /></p>
+
+<p><strong>Note</strong>: On the recommended HW infrastructure, deployment should take less that one hour and require no user intervention.</p></li>
+</ol>
+
+<h2><a id='use_console'></a>Using the Cloud Foundry Console</h2>
+
+<p>The Cloud Foundry Console is a tool to help manage organizations, users, applications, and applications spaces. Use the following steps to login and invite users to the console.</p>
+
+<ol>
+<li>Browse to <a href="http://console.(your-app-domain.com)">http://console.(your-app-domain.com)</a>. Refer to <strong>Runtime &gt; Configuration &gt; Console</strong> if you forget your app domain.</li>
+<li><p>Login to the console using the UAA admin and password. Refer to <strong>Runtime &gt; Credentials</strong> for this login information.</p>
+
+<p><img src="images/guide/uaa_login.png" /></p></li>
+<li><p>You will see the console org, which contains the console application information.</p>
+
+<p><img src="images/guide/console_org.png" /></p></li>
+<li><p>Select <strong>ORG: Console &gt; Create New Organization</strong>.</p>
+
+<p><img src="images/guide/create_org.png" /></p></li>
+<li><p>Name your org, check the <strong>Terms of Service</strong> checkbox, and click <strong>Create</strong>.</p>
+
+<p><img src="images/guide/name_org.png" /></p></li>
+<li><p>Select <strong>Users</strong>.</p>
+
+<p><img src="images/guide/select_users.png" /></p></li>
+<li><p>Click <strong>Add</strong>.</p>
+
+<p><img src="images/guide/add.png" /></p></li>
+<li><p>Invite a new user to join your org. Assuming your SMTP server is configured correctly (see <strong>Runtime &gt; Configure &gt; Console</strong>), the user will receive a confirmation email.</p>
+
+<p><strong>Note</strong>: In Pivotal CF version 0.3.0, the new user will get a 500 error after confirming and creating their password. Ignore this error. The error is resolved in Pivotal CF version 0.3.1.</p></li>
+</ol>
+
+<h2><a id='target'></a>Target Cloud Foundry</h2>
+
+<p>The next step is to use the <strong>cf</strong> tool to target your Cloud Foundry installation. Make sure to have the <strong>cf</strong> tool installed according to the instructions on the Cloud Foundry documentation site.</p>
+
+<ol>
+<li>Open a terminal on a Mac or *nix computer.</li>
+<li><p>Login to your Cloud Controller by targeting &lsquo;api&rsquo; followed by the system domain. Refer to <strong>Runtime &gt; Configure &gt; Domains</strong> if you do not remember this domain.</p>
+<pre class="highlight text">$ cf target api.your.domain
+$ cf login admin
+Password&gt; ***********
+</pre>
+<p><strong>Note</strong>: Refer to* <strong>Runtime &gt; Credentials</strong> *for the UAA admin and password. You can also use the user that you created in the console, or create another user with the create-user command.</p></li>
+<li><p>Switch to the org and space you created in the Console.</p>
+<pre class="highlight text">cf target -o my-awesome-org
+Switching to organization my-awesome-org... OK
+1: development
+2: production
+3: staging
+Space&gt; 1
+Switching to space development... OK
+
+Target Information (where will apps be pushed):
+
+CF instance: http://api.yourdomain (API version: 2)
+user: admin
+target app space: development (org: my-awesome-org)
+</pre></li>
+<li><p>Switch to the directory of an application you would like to push to Cloud Foundry.</p>
+<pre class="highlight text">$ cd someapp
+</pre></li>
+<li><p>Push the app to Cloud Foundry.</p>
+<pre class="highlight text">$ cf push someapp
+</pre>
+<p>Refer to the Cloud Foundry documentation at <a href="http://docs.cloudfoundry.com">docs.cloudfoundry.com</a> for an overview and examples of the cf command line tool.</p></li>
+</ol>
+
+<h2><a id='eclipse'></a>Cloud Foundry Eclipse Plugin</h2>
+
+<p>The Cloud Foundry Eclipse Plugin is an extension that enables Cloud Foundry users to deploy and manage Java and Spring applications on a Cloud Foundry instance from Eclipse or Spring Tools Suite (STS).</p>
+
+<p>The plugin supports Eclipse v3.8 and v4.3 (a Java EE version is recommended) and STS 3.0.0 and later.</p>
+
+<p>This guide has instructions for installing and using v1.5.1 of the plugin, which is compatible with Cloud Foundry v2. These instructions assume you are using Eclipse.</p>
+
+<p>You can use the plugin to:</p>
+
+<ul>
+<li>Deploy applications from an Eclipse workspace to a running Cloud Foundry instance. The plugin supports Java/JVM applications and frameworks, such as:
+
+<ul>
+<li>Spring</li>
+<li>Java Web</li>
+<li>Java standalone</li>
+<li>Grails</li>
+<li>Lift</li>
+</ul></li>
+<li>Create, bind, and unbind services.</li>
+<li>View and manage deployed applications and services.</li>
+<li><p>Start and stop applications.</p>
+
+<p>v1.5.1 of the plugin provides several new features:</p>
+
+<ul>
+<li>Custom buildpack support - When you deploy an application using the plugin, you can supply the URL of a custom buildpack.</li>
+<li>Separately defined host and domain - In this version of the plugin, you specify the components (host and domain) of an application URL separately, rather than as a complete URL.</li>
+<li>Cloud Foundry server cloning - v1.5.1 of the plugin makes it easier to work with multiple Cloud Foundry spaces. After configuring a first Cloud Foundry server instance using the plugin, you can use the new <strong>Clone Server</strong> command to create additional server instances that target other Cloud Foundry spaces.</li>
+</ul></li>
+</ul>
+
+<h2>Install Cloud Foundry Eclipse Plugin</h2>
+
+<p>If you have a previous version of the Cloud Foundry Eclipse Plugin installed, uninstall it before installing a new version. To uninstall the plugin:</p>
+
+<ol>
+<li>Choose <strong>About Eclipse</strong> from the Eclipse menu and click <strong>Installation Details</strong>.</li>
+<li><p>On the <strong>Installation Details</strong>, select the previous version of the plugin and click <strong>Uninstall</strong>.</p>
+
+<p>Follow the instructions appropriate for your environment:</p></li>
+</ol>
+
+<ul>
+<li><a href="#eclipse_market">Install to Eclipse from Marketplace</a></li>
+<li><a href="#install-local">Install from a Local Repository</a></li>
+</ul>
+
+<h3><a id='eclipse_market'></a>Install to Eclipse from Marketplace</h3>
+
+<p>Follow these instructions to install the Cloud Foundry Eclipse Plugin to Eclipse from the Eclipse Marketplace.</p>
+
+<ol>
+<li>Start Eclipse.</li>
+<li>Select <strong>Eclipse Marketplace</strong> from the Eclipse <strong>Help</strong> menu.</li>
+<li>On the marketplace window, enter &ldquo;Cloud Foundry&rdquo; in the <strong>Find</strong> field and click <strong>Go</strong>.</li>
+<li><p>In the search results, click the <strong>Install</strong> control next to the listing for Cloud Foundry Integration.</p>
+
+<p><img src="images/guide/eclipse-marketplace.png" /></p></li>
+<li><p>The <strong>Confirm Selected Features</strong> window lists the plugin - &ldquo;Cloud Foundry Integration for Eclipse&rdquo; - and the optional &ldquo;SpringSource UAA Integration&rdquo; component, which reports tool usage data, anonymously. If you do not want your plugin usage statistics to be reported, de-select the UAA component before clicking <strong>Confirm</strong>.</p>
+
+<p><img src="images/guide/confirm-selected-features.png" /></p></li>
+<li><p>The <strong>Review Licenses</strong> window appears. Click &ldquo;I accept the terms of the license agreement&rdquo; and click <strong>Finish</strong>.</p></li>
+<li><p>The <strong>Software Updates</strong> window appears. Click <strong>Yes</strong> to restart Eclipse.</p></li>
+</ol>
+
+<h3><a id='install-local'></a>Install from a Local Repository</h3>
+
+<p>If you need to install the Cloud Foundry Eclipse Plugin locally, rather than via the internet, you can download the source and create a repository that you can copy to the target machine and then install from it.</p>
+
+<p><em>Step 1: Obtain the plugin source from GitHub.</em></p>
+
+<ul>
+<li><p>You can download archived source code for released versions of the plugin from</p>
+
+<p><a href="https://github.com/SpringSource/eclipse-integration-cloudfoundry/releases">https://github.com/SpringSource/eclipse-integration-cloudfoundry/releases</a>.</p></li>
+<li><p>If you want the very latest source code for the plugin, clone the project repository:</p>
+<pre class="highlight text">git clone https://github.com/SpringSource/eclipse-integration-cloudfoundry
+</pre></li>
+</ul>
+
+<p><em>Step 2: Build repository.</em></p>
+
+<p>Unzip the downloaded archive, change directory to the root directory and run this command in the shell:</p>
+
+<p><code>mvn -Pe37 package</code></p>
+
+<p>Transfer <code>org.cloudfoundry.ide.eclipse.server.site/target/site</code> to the machine where you want to install the plugin. If you zip it up, be sure to unzip prior to installation.</p>
+
+<p><em>Step 3: Install from local repository.</em></p>
+
+<p>On the machine running Eclipse:</p>
+
+<ol>
+<li>In Eclipse, select <strong>Install New Software</strong> from the <strong>Help</strong> menu.</li>
+<li>On the <strong>Available Software</strong> window, click <strong>Add</strong> to the right of the <strong>Work with</strong> field.</li>
+<li>On the <strong>Add Repository</strong> window, enter a name for the repository, for example “Cloud Foundry Integration”, and click <strong>Local</strong>.</li>
+<li>On the <strong>Open</strong> window, browse to <code>org.cloudfoundry.ide.eclipse.server.site/target/site</code> and click <strong>Open</strong>.</li>
+<li>On the <strong>Add Repository</strong> window, click <strong>OK</strong>.</li>
+<li>On the <strong>Available Software</strong> window, checkmark: “Core/Cloud Foundry Integration” and “Resources/Cloud Foundry Integration” and click <strong>Next</strong>.</li>
+<li>On the <strong>Review Licenses</strong> window, click “I accept the terms of the license agreement” and click <strong>Finish</strong>.
+<br></li>
+</ol>
+
+<h2><a id='cloud-foundry-server'></a>Create a Cloud Foundry Server</h2>
+
+<p>This section has instructions for configuring a server resource that will represent a target Cloud Foundry space. You will create a server for each space in Cloud Foundry to which you will deploy applications. Once you create your first Cloud Foundry service instances using the instructions below, you can create additional instances using the <a href="#clone">Clone Server</a> feature.</p>
+
+<ol>
+<li>Right-click the <strong>Servers</strong> view and select <strong>New &gt; Server</strong>.</li>
+<li><p>In the <strong>Define a New Server</strong> window, expand the <strong>Pivotal</strong> folder, select <strong>Cloud Foundry</strong>, and click <strong>Next</strong>.</p>
+
+<p><strong>Note:</strong> Do not enter values for <strong>Server host name</strong> or <strong>Server Runtime Environment</strong>. These fields are unused and will be removed in a future version of the plugin.</p>
+
+<p><img src="images/guide/define-new-server.png" /></p></li>
+<li><p>On the <strong>Cloud Foundry Account</strong> window, if you already have a Cloud Foundry account, enter the email account and password you use to log on to Cloud Foundry and click <strong>Validate Account</strong>.</p>
+
+<p>If you do not have a Cloud Foundry account, you can click <strong>Pivotal CF Signup</strong> to get one and complete this procedure after your account is established.</p>
+
+<p><strong>Note:</strong> The <strong>Register Account</strong> function is not supported by public instances of Cloud Foundry v2. You can register accounts for Pivotal CF Hosted using the Pivotal CF portal at <a href="https://console.run.pivotal.io">run.pivotal.io</a>.</p>
+
+<p><img src="images/guide/cloud-foundry-account.png" /></p></li>
+<li><p>The <strong>Cloud Foundry Account</strong> window is refreshed and displays a message indicating whether or not your credentials were valid &mdash; if they were, click <strong>Next</strong>.</p>
+
+<p><img src="images/guide/new-server.png" /></p></li>
+<li><p>On the <strong>Organizations and Spaces</strong> window, select the space you want to target, and click <strong>Finish</strong>.</p>
+
+<p><strong>Note:</strong> If you do not select a space, the server will be configured to connect to the default space, which is the first encountered in a list of your spaces.</p></li>
+<li><p>Once you have successfully configured the Pivotal Cloud Foundry server, it will appear in the <strong>Servers</strong> view of the Eclipse or STS user interface. To familiarize yourself with the plugin user interface, see <a href="#plugin-ui">About the Plugin User Interface</a>.</p></li>
+</ol>
+
+<h2><a id='plugin-ui'></a>About the Plugin User Interface</h2>
+
+<p>The paragraphs below describe the Cloud Foundry Eclipse plugin user interface. If you do not see the tabs described below, select the Pivotal Cloud Foundry server in the <strong>Servers</strong> view. To expose the Servers view, ensure that you are using the Java perspective, then select <strong>Window &gt; Show View &gt; Other &gt; Server &gt; Servers</strong>.</p>
+
+<p>The Cloud Foundry editor, outlined in red in the screenshot below, is the primary plugin user interface.
+ Some workflows involve interacting with standard elements of the Eclipse user interface, such as the <strong>Project Explorer</strong> and the <strong>Console</strong> and <strong>Servers</strong> views.</p>
+
+<p>Note that the Cloud Foundry editor allows you to work with a single Cloud Foundry space; each space is represented by a distinct server instance in the <strong>Servers</strong> view (B). Multiple editors, each targeting a different space, can be open simultaneously. However, only one editor targeting a particular Cloud Foundry server instance can be open at a time.</p>
+
+<h3><a id='overview-tab'></a>Overview Tab</h3>
+
+<p>The follow panes and views are present when the <strong>Overview</strong> tab is selected:</p>
+
+<ul>
+<li>A &mdash; The <strong>Package Explorer</strong> view lists the projects in the current workspace.</li>
+<li>B &mdash; The <strong>Servers</strong> view lists server instances configured in the current workspace. A server of type &ldquo;Pivotal Cloud Foundry&rdquo; represents a targeted space in a Cloud Foundry instance.</li>
+<li>C &mdash; The <strong>General Information</strong> pane.</li>
+<li>D &mdash; The <strong>Account Information</strong> pane lists your Cloud Foundry credentials and the target organization and space. The pane includes these controls:
+
+<ul>
+<li><strong>Clone Server</strong> &ndash; Use to create additional Pivotal Cloud Foundry server instances. You must configure a server instance for each Cloud Foundry space you wish to target.</li>
+<li><strong>Change Password</strong> &ndash; Use to change your Cloud Foundry password.</li>
+<li><strong>Validate Account</strong> &ndash; Use to verify your currently configured Cloud Foundry credentials.</li>
+<li><strong>Pivotal CF Signup</strong> &ndash; Use to sign up for a Cloud Foundry account.</li>
+</ul></li>
+<li>E &mdash; The <strong>Server Status</strong> pane shows whether or not you are connected to the target Cloud Foundry space, and the <strong>Disconnect</strong> and <strong>Connect</strong> controls.</li>
+<li>F &mdash; The <strong>Console</strong> view displays status messages when you perform an action such as deploying an application. To expose the Console view, select <strong>Window &gt; Show View &gt; Console</strong>.</li>
+<li><p>G &mdash; The <strong>Remote Systems</strong> view allows you to view the contents of a file that is part of a deployed application. To expose the Remote Systems view, select <strong>Window &gt; Show View &gt; Other &gt; Remote Systems &gt; Remote Systems</strong>.</p>
+
+<p><img src="images/guide/ui-eclipse-overview.png" /></p></li>
+</ul>
+
+<h3><a id='apps-services-tab'></a>Applications and Services Tab</h3>
+
+<p>The follow panes are present when the <strong>Applications and Services</strong> tab is selected:</p>
+
+<ul>
+<li>H &mdash; The <strong>Applications</strong> pane lists the applications deployed to the target space.</li>
+<li>I &mdash;  The <strong>Services</strong> pane lists the services provisioned in the targeted space.</li>
+<li><p>J &mdash;  The <strong>General</strong> pane displays the following information for the application currently selected in the <strong>Applications</strong> pane:</p>
+
+<ul>
+<li><strong>Name</strong></li>
+<li><strong>Mapped URLs</strong> &ndash; Lists URLs mapped to the application. You can click a URL to open a browser to the application within Eclipse (or STS); and click the pencil icon to add or remove mapped URLs.</li>
+<li><strong>Memory Limit</strong> &ndash; The amount of memory allocated to the application. You can use the pull-down to change the memory limit.</li>
+<li><strong>Instances</strong> &ndash; The number of instances of the application that are deployed. You can use the pull-down to change number of instances.</li>
+<li><strong>Start</strong>, <strong>Stop</strong>, <strong>Restart</strong>, <strong>Update and Restart</strong> &ndash; he controls that appear depend on the current state of the application. The <strong>Update and Restart</strong> command will attempt an incremental push of only those application resources that have changed. It will not perform a full application push.</li>
+</ul></li>
+<li><p>K &mdash; The <strong>Services</strong> pane lists services that are bound to the application currently selected in the <strong>Applications</strong> pane. Note the icon in the upper right corner of the pane &ndash; it allows you to create a service.</p>
+
+<p><img src="images/guide/ui-eclipse-apps-services.png" /></p></li>
+</ul>
+
+<p>Refer to the Cloud Foundry documentation at <a href="http://docs.cloudfoundry.com/docs/using/managing-apps/ide/sts.html">docs.cloudfoundry.com</a> for more information about using the Cloud Foundry Eclipse plugin.</p>
+
+<h2><a id='known_issues'></a>Known Issues and Important Tips for this Release</h2>
+
+<p>Version 0.3.1 of Pivotal CF includes the following known issues:</p>
+
+<ul>
+<li>vSphere folder names with slashes in the name will cause failures.</li>
+<li>A vCenter password starting with a special character will cause failures.</li>
+<li>The UAAC gem must be used to create additional admin users, or change the admin user&rsquo;s password.</li>
+<li>Your app domain must be different than your system domain to protect against deploying apps called &ldquo;uaa.&rdquo;</li>
+<li>The Cloud Controller blobstore will continue to grow as users deploy apps. Garbage collection of the blobstore will be forthcoming in a subsequent release.</li>
+<li><strong>Add Services</strong> and <strong>Marketplace</strong> features of the Console are not functional.</li>
+<li>Cloud Foundry deployments provisioned to a resource pool cannot be deleted using the Pivotal CF interface and must be deleted using vCenter.</li>
+<li>Clicking <strong>Install</strong> with empty vSphere settings will raise an exception.</li>
+<li>If vSphere performance data is not available, a deploy will result in a divide by zero error.</li>
+<li>HTTPS is turned off for Cloud Foundry in this release.</li>
+<li>The network you use must be outside of any folders in vCenter.</li>
+<li>If the install fails, check vSphere to ensure that the IP ranges you requested are still available.</li>
+</ul>
+
+
+        </div>
+      </div>
+    </div>
+
+    <div class='footer-wrap'>
+      <div class="container">
+        <div class='span-2'>
+          <p class='fss link-list'>
+            <a href="http://www.gopivotal.com/about-pivotal/contact-us">Contact Us</a>
+            |
+            <a href="http://www.gopivotal.com/privacy-policy">Privacy Policy</a>
+            |
+            <a href="http://www.gopivotal.com/terms-of-use">Terms of Use</a>
+          </p>
+        </div>
+        <div class="span-4 last">
+          <p class='fss fclightgray right'>
+            &copy;
+            <script>
+              //<![CDATA[
+                var d = new Date();
+                document.write(d.getFullYear());
+              //]]>
+            </script>
+            GoPivotal, Inc. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      (function() {
+        var didInit = false;
+        function initMunchkin() {
+          if(didInit === false) {
+            didInit = true;
+            Munchkin.init('625-IUJ-009');
+          }
+        }
+        var s = document.createElement('script');
+        s.type = 'text/javascript';
+        s.async = true;
+        s.src = document.location.protocol + '//munchkin.marketo.net/munchkin.js';
+        s.onreadystatechange = function() {
+          if (this.readyState == 'complete' || this.readyState == 'loaded') {
+            initMunchkin();
+          }
+        };
+        s.onload = initMunchkin;
+        document.getElementsByTagName('head')[0].appendChild(s);
+      })();
+    </script>
+  </body>
+</html>
