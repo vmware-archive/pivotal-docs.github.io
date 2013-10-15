@@ -55,6 +55,7 @@
 
 <ul>
 <li>vSphere 5.0, 5.1, 5.5. Recommended version: vSphere 5.1</li>
+<li>vSphere editions: Standard and above</li>
 <li>vSphere user privileges to create VMs, disk paths, and VM folders</li>
 <li>Ability to create a wildcard DNS record to point to your router or load balancer</li>
 <li>No DHCP on the network: DHCP prevents static IP addresses from being re-allocated</li>
@@ -420,11 +421,11 @@ target app space: development (org: my-awesome-org)
 </ol>
 
 <ul>
-<li><a href="#eclipse_market">Install to Eclipse from Marketplace</a></li>
+<li><a href="#eclipse_market">Install the Cloud Foundry Plugin from the Eclipse Marketplace</a></li>
 <li><a href="#install-local">Install from a Local Repository</a></li>
 </ul>
 
-<h3><a id='eclipse_market'></a>Install to Eclipse from Marketplace</h3>
+<h3><a id='eclipse_market'></a>Install the Cloud Foundry Plugin from the Eclipse Marketplace</h3>
 
 <p>Follow these instructions to install the Cloud Foundry Eclipse Plugin to Eclipse from the Eclipse Marketplace.</p>
 
@@ -569,7 +570,7 @@ target app space: development (org: my-awesome-org)
 <ul>
 <li>vSphere folder names with slashes in the name will cause failures.</li>
 <li>A vCenter password starting with a special character will cause failures.</li>
-<li>The UAAC gem must be used to create additional admin users, or change the admin user&rsquo;s password.</li>
+<li>You must use the UAAC gem to create additional admin users or change the admin user&rsquo;s password.</li>
 <li>Your app domain must be different than your system domain to protect against deploying apps called &ldquo;uaa.&rdquo;</li>
 <li>The Cloud Controller blobstore will continue to grow as users deploy apps. Garbage collection of the blobstore will be forthcoming in a subsequent release.</li>
 <li><strong>Add Services</strong> and <strong>Marketplace</strong> features of the Console are not functional.</li>

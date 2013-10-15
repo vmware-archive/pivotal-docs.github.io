@@ -59,7 +59,7 @@
 
 <h3><a id='new_network'></a>Step 1: Create a new network in vSphere</h3>
 
-<p><strong>Option 1</strong>: Connect to vCenter using the vSphere client.</p>
+<p>Connect to vCenter using the vSphere client.</p>
 
 <ol>
 <li><p>On the <strong>Inventory</strong> tab, select <strong>Hosts and Clusters</strong>.</p>
@@ -68,7 +68,7 @@
 <li><p>In the resources tree, expand the datacenter and cluster to reveal the list of hosts, then select the host you want to update.</p>
 
 <p><img src="images/hosts_clusters.png" /></p></li>
-<li><p>Navigate to the <strong>Configuration</strong> tab and select the <strong>Networking</strong> view, then click <strong>Add Networking</strong> to add a new network.</p>
+<li><p>Navigate to the <strong>Configuration</strong> tab and select the <strong>Networking</strong> view, then click <strong>Add Networking</strong> to add a new network. You will deploy Pivotal CF to this network.</p>
 
 <p><img src="images/config_tab.psd" /></p>
 
@@ -82,14 +82,14 @@
 <li><p>Select <strong>File &gt; Deploy OVF template</strong> to launch the <strong>Deploy OVF Template</strong> wizard.</p>
 
 <p><img src="images/file_menu.png" /></p></li>
-<li><p>On the <strong>Source</strong> page, browse to the pfSense OVA file and click <strong>Next</strong>.</p>
+<li><p>On the <strong>Source</strong> page, browse to the pfSense .ova file and click <strong>Next</strong>.</p>
 
 <p><img src="images/source_page.png" /></p></li>
 <li><p>On the <strong>OVF Template Details</strong> page, review the template information and click <strong>Next</strong>.</p></li>
 <li><p>On the <strong>Name and Location</strong> page, name the template and select a location, then click <strong>Next</strong>.</p>
 
 <p><img src="images/name_page.png" /></p></li>
-<li><p>On the <strong>Resource Pool</strong> page, select an available resource pool and click <strong>Next</strong>.</p>
+<li><p><strong>(Optional)</strong> On the <strong>Resource Pool</strong> page, select an available resource pool and click <strong>Next</strong>.</p>
 
 <p><img src="images/pool_page.png" /></p></li>
 <li><p>On the <strong>Storage</strong> page, select a storage location and click <strong>Next</strong>.</p>
@@ -114,11 +114,11 @@
 
 <p>There are two options for deploying the Pivotal CF installation VM:</p>
 
-<p><strong>Option 1: One network adapter</strong></p>
+<p><strong>Option 1:</strong> One network adapter</p>
 
 <ol>
-<li><p>Leave only one network adapter on the installation VM.</p></li>
-<li><p>Add a port forwarding rule to forward incoming HTTPS traffic to the installation VM. This allows you to manage pfSense from outside the network using the webConfigurator. To edit the port forwarding rules, open the webConfigurator and select <strong>Firewall &gt; NAT</strong>.</p>
+<li><p>Leave only one network adapter on the installation VM. This network adapter should connect to the private network you just created.</p></li>
+<li><p>Add a port forwarding rule to forward incoming HTTPS traffic to the installation VM. This allows you to manage pfSense from outside the network using the webConfigurator GUI. To edit the port forwarding rules, open the webConfigurator and select <strong>Firewall &gt; NAT</strong>.</p>
 
 <p><img src="images/port_forward.png" /></p></li>
 <li><p>Add firewall rules to allow traffic to pass, as in the following example rules:</p></li>
@@ -134,15 +134,26 @@
 <p>Add a second network adapter to the installation VM. This results in the installation VM  having two IP addresses:</p>
 
 <ul>
-<li>A public-facing IP address</li>
-<li>An internal VLAN to communicate with other BOSH/Cloud Foundry components</li>
+<li>A public-facing IP address: In the previous procedure, this is the network adapter connected to &ldquo;VM Network.&rdquo;</li>
+<li>An internal VLAN to communicate with other BOSH/Cloud Foundry components: This is the network adapter connected to the new private network you created above.</li>
 </ul>
 
 <p>Once you have completed one of the above options, the installation VM’s IP addresses will belong to the VLAN.</p>
 
 <h3><a id='managing_pfsense'></a> Managing pfSense</h3>
 
-<p>pfSense recommends you use the web-based GUI, webConfigurator, to manage pfSense. The default username and password are <strong>admin/pfsense</strong>. On first login, update your credentials from the default settings.</p>
+<p>pfSense recommends you use the web-based GUI, webConfigurator, to manage pfSense.</p>
+
+<ol>
+<li>Ensure that you are inside the new private network you created above before attempting to access webConfigurator.</li>
+<li>Log in using the default username and password: <strong>admin/pfsense</strong>. On first login, update your credentials from the default settings.</li>
+<li><strong>(Optional)</strong> If you need access from a public IP, complete one of the following options:
+
+<ul>
+<li>Add a firewall rule to the pfSense image to allow access to ports 80 and 443. Refer to option 1 above for more information.</li>
+<li>Temporarily disable the gateway using the <code>pfctl -d</code> command. Restore the gateway after you have finished using the <code>pfctl -e</code> command.</li>
+</ul></li>
+</ol>
 
 <p>Refer to the pfSense <a href="https://doc.pfsense.org/index.php/WebGUI">documentation</a> for more information about using the pfSense webConfigurator.</p>
 
