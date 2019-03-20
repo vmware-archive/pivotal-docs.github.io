@@ -4,7 +4,7 @@ html, body {
 }
 
 .header-wrap {
-  background: #00786e url('http://www.gopivotal.com/sites/all/themes/gopivotal/assets/images/nav_bg.gif');
+  background: #00786e url('https://pivotal.io/sites/all/themes/gopivotal/assets/images/nav_bg.gif');
   position: relative;
 }
 
@@ -27,7 +27,7 @@ html, body {
 
 .logo {
   display: block;
-  background: url(http://www.gopivotal.com/sites/all/themes/gopivotal/assets/images/nav_logo.gif) no-repeat scroll left;
+  background: url(https://pivotal.io/sites/all/themes/gopivotal/assets/images/nav_logo.gif) no-repeat scroll left;
   width: 150px;
   margin-left: -30px;
   height: 44px;
